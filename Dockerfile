@@ -26,9 +26,8 @@ RUN apt-get update && apt-get install yarn
 
 RUN yarn global add ts-protoc-gen google-protobuf
 
-RUN git clone --recurse-submodules https://github.com/grpc/grpc-web.git /grpc-web-install
+RUN git clone --single-branch --branch network-next --depth 1 --recurse-submodules https://github.com/networknext/grpc-web /grpc-web-install
 WORKDIR /grpc-web-install/
-RUN git checkout -b old-fix 626ce9702bb55d2f8841570c300fe4baa3eaaeca
 RUN make install-plugin
 WORKDIR /grpc-web-install/packages/grpc-web/
 RUN yarn
