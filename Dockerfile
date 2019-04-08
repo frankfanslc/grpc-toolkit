@@ -35,3 +35,13 @@ RUN yarn run build
 RUN yarn pack --filename /grpc-web.tar.gz
 RUN mkdir /grpc-web
 RUN cd /grpc-web && tar -xvf /grpc-web.tar.gz
+
+WORKDIR /temp-test
+ADD test.proto /temp-test
+RUN mkdir api api_grpc && \
+    /protoc/bin/protoc \
+      --plugin="protoc-gen-ts=$(yarn global bin)/protoc-gen-ts" \
+      --js_out="import_style=commonjs:api/" \
+      --grpc-web_out="import_style=commonjs+dts,mode=grpcwebtext:api_grpc/" \
+      *.proto && \
+    bash -c 'OUTPUT=$(grep "UNKNOWN = 0" api_grpc/test_pb.d.ts); if [ "$OUTPUT" == "" ]; then exit 1; fi'
