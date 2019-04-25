@@ -39,4 +39,8 @@ RUN apt update && \
       --js_out="import_style=commonjs:api/" \
       --grpc-web_out="import_style=commonjs+dts,mode=grpcwebtext:api_grpc/" \
       *.proto && \
-    bash -c 'OUTPUT=$(grep "UNKNOWN = 0" api_grpc/test_pb.d.ts); if [ "$OUTPUT" == "" ]; then exit 1; fi'
+    bash -c 'OUTPUT=$(grep "UNKNOWN = 0" api_grpc/test_pb.d.ts); if [ "$OUTPUT" == "" ]; then exit 1; fi' && \
+    cd / && \
+    apt remove -y wget git curl unzip gnupg2 build-essential && \
+    apt autoremove -y && \
+    rm -Rf /temp-test
